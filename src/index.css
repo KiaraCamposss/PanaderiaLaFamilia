@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Paytone+One&family=Fredoka:wght@400;600;700&display=swap');
+
+/* Cursiva pincelada natural y derecha */
+.font-brand-cursive {
+  font-family: 'Kaushan Script', cursive;
+}
+
+/* Letra gruesa en bloque para "PANADERÍA" */
+.font-brand-display {
+  font-family: 'Paytone One', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fffaf4;
+  color: #3d2514;
+  font-family: 'Fredoka', sans-serif;
+}
