@@ -28,10 +28,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Cabecera con Logo Proporcionado y Tipografía Alineada */}
         <div className="p-5 border-b border-[#E8DFC8]">
           <div className="flex items-center gap-3">
-            {/* Contenedor del Logo más amplio (w-16 h-16) */}
+            {/* Contenedor del Logo con import.meta.env.BASE_URL */}
             <div className="w-16 h-16 bg-white p-1 rounded-2xl border border-orange-200/80 shadow-xs flex items-center justify-center overflow-hidden flex-shrink-0">
               <img
-                src="/logo.png"
+                src={`${import.meta.env.BASE_URL}logo.png`}
                 alt="Logo Panadería La Familia"
                 className="w-full h-full object-contain"
                 onError={(e) => {
@@ -40,7 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               />
             </div>
             
-            {/* Título alineado sin rotaciones */}
+            {/* Título alineado */}
             <div className="flex flex-col justify-center">
               <span className="text-[#C84B20] font-brand-cursive text-xl font-bold leading-tight">
                 La Familia

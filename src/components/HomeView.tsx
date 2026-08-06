@@ -25,7 +25,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               PANADERÍA LA FAMILIA • A SU SERVICIO
             </span>
 
-            {/* Título en dos colores como en la imagen de referencia */}
+            {/* Título en dos colores */}
             <h1 className="text-4xl md:text-5xl font-black font-brand-display text-[#3D2314] leading-[1.1] tracking-tight">
               Pan Fresco con <br />
               <span className="text-[#C84B20]">El Mejor Sabor</span>
@@ -47,14 +47,14 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
           </div>
 
-          {/* Lado Derecho: pan.png FLOTANDO SIN MARCO NI CONTENEDORES (Igual a las donas) */}
+          {/* Lado Derecho: pan.png Adaptado con import.meta.env.BASE_URL */}
           <div className="md:col-span-5 flex justify-center items-center z-10 relative">
             <div className="w-full max-w-[320px] aspect-square flex items-center justify-center">
               <img
-                src="/pan.png"
+                src={`${import.meta.env.BASE_URL}pan.png`}
                 alt="Panadería La Familia"
                 className="w-full h-full object-contain filter drop-shadow-[0_20px_20px_rgba(61,35,20,0.25)] hover:scale-105 transition-transform duration-500"
-                onError={(e) => {
+                onError={() => {
                   console.warn("Verifica que pan.png esté guardado dentro de la carpeta public/");
                 }}
               />
@@ -64,7 +64,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </div>
 
-      {/* 2. TARJETAS DE ACCIÓN ABAJO (CON TONOS BEIGE Y DETALLES EN ROJO / ANARANJADO) */}
+      {/* 2. TARJETAS DE ACCIÓN ABAJO */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* Card 1: Registrar Cliente */}
