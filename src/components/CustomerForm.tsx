@@ -40,7 +40,25 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
     setLoadingList(false);
   }
 
-  // Crear cliente con Toast
+  // 🤖 Helper para construir la URL de WhatsApp con emojis 100% seguros
+  function buildWhatsAppUrl(phone: string, customerName: string, ticketCode?: string) {
+    const cleanPhone = phone.replace(/\D/g, '');
+    const formattedPhone = cleanPhone.startsWith('506') ? cleanPhone : `506${cleanPhone}`;
+    
+
+
+    let message = `¡Hola ${customerName}! \n¡Bienvenido/a a *Panadería La Familia* (${currentBranch})!\n\nTe hemos registrado exitosamente en nuestro sistema.`;
+    
+    if (ticketCode) {
+      message += `\n\n Tu tiquete digital de bienvenida es: \nYa estás participando en nuestra Rifa Semanal. ¡Muchos éxitos! `;
+    } else {
+      message += `\n\nYa estás participando en nuestros sorteos semanales. ¡Gracias por tu preferencia!`;
+    }
+
+    return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+  }
+
+  // Crear cliente y ABRIR WHATSAPP AUTOMÁTICAMENTE
   async function handleCreateCustomer(e: React.FormEvent) {
     e.preventDefault();
     if (!nombre.trim() || !telefono.trim()) return;
@@ -50,21 +68,34 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
       return;
     }
 
+    // 🚀 Abrimos la ventana inmediatamente para evitar que el navegador la bloquee como "Popup"
+    const whatsappWindow = window.open('about:blank', '_blank');
+
     setLoading(true);
     try {
-      await customerService.createCustomerWithTicket(
+      const result: any = await customerService.createCustomerWithTicket(
         nombre.trim(),
         telefono.trim(),
         currentBranch,
         activeRaffle.id
       );
 
-      toast.success('¡Cliente registrado con éxito y 1er ticket asignado!');
+      // Extraemos el código de tiquete que retorna la BD
+      const ticketCode = result?.codigo || result?.ticket_codigo || result?.ticket?.codigo;
+
+      // Redirigimos la ventana ya abierta hacia la URL de WhatsApp
+      if (whatsappWindow) {
+        whatsappWindow.location.href = buildWhatsAppUrl(telefono.trim(), nombre.trim(), ticketCode);
+      }
+
+      toast.success('¡Cliente registrado con éxito y redirigido a WhatsApp!');
       setNombre('');
       setTelefono('');
       await loadCustomers();
       setViewMode('list');
     } catch (err: any) {
+      // Si hubo un error, cerramos la pestaña que habíamos abierto
+      if (whatsappWindow) whatsappWindow.close();
       toast.error(err.message || 'Error al guardar el cliente');
     } finally {
       setLoading(false);
@@ -243,7 +274,7 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
                 Registrar Nuevo Cliente
               </h3>
               <p className="text-xs font-bold text-stone-500">
-                Se acreditará automáticamente 1 ticket de bienvenida para la rifa activa.
+                Al guardar, se abrirá automáticamente WhatsApp para enviarle su tiquete de bienvenida.
               </p>
             </div>
           </div>
@@ -282,7 +313,7 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
               disabled={loading}
               className="w-full bg-[#3D2314] hover:bg-[#8C271E] text-white font-black py-4 rounded-xl shadow-md transition-all cursor-pointer text-sm sm:text-base"
             >
-              {loading ? 'Guardando...' : 'Guardar y Asignar Ticket'}
+              {loading ? 'Guardando...' : 'Guardar y Enviar WhatsApp'}
             </button>
           </form>
         </div>
