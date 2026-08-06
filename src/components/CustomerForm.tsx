@@ -114,12 +114,12 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
   return (
     <div className="space-y-6 select-none">
       
-      {/* Selector de Pestañas */}
-      <div className="flex items-center justify-between bg-[#F7F2EB] p-2 rounded-2xl border border-[#E8DFC8]">
-        <div className="flex gap-2">
+      {/* Selector de Pestañas Responsivo */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between bg-[#F7F2EB] p-2 rounded-2xl border border-[#E8DFC8] gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
             onClick={() => setViewMode('list')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-sm transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm transition-all cursor-pointer ${
               viewMode === 'list'
                 ? 'bg-[#3D2314] text-[#FFF6EB] shadow-sm'
                 : 'text-[#60493A] hover:bg-[#EFE6D8]'
@@ -130,7 +130,7 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
 
           <button
             onClick={() => setViewMode('create')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-sm transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm transition-all cursor-pointer ${
               viewMode === 'create'
                 ? 'bg-[#3D2314] text-[#FFF6EB] shadow-sm'
                 : 'text-[#60493A] hover:bg-[#EFE6D8]'
@@ -143,9 +143,9 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
 
       {/* VISTA 1: LISTADO DE CLIENTES */}
       {viewMode === 'list' && (
-        <div className="bg-[#FFFDF9] rounded-[28px] border border-orange-200/80 p-6 shadow-md space-y-5">
+        <div className="bg-[#FFFDF9] rounded-[24px] sm:rounded-[28px] border border-orange-200/80 p-4 sm:p-6 shadow-md space-y-5">
           
-          <div className="flex flex-col sm:flex-row gap-3 justify-between items-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-3.5" />
               <input
@@ -157,12 +157,12 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
               />
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
               <span className="text-xs font-bold text-stone-500 uppercase">Sucursal:</span>
               <select
                 value={branchFilter}
                 onChange={(e) => setBranchFilter(e.target.value)}
-                className="bg-[#F7F2EB] border border-[#E8DFC8] rounded-xl px-3 py-2 font-bold text-sm text-[#3D2314] focus:outline-none cursor-pointer"
+                className="bg-[#F7F2EB] border border-[#E8DFC8] rounded-xl px-3 py-2 font-bold text-sm text-[#3D2314] focus:outline-none cursor-pointer flex-1 sm:flex-none"
               >
                 <option value="Todas">Todas las sucursales</option>
                 <option value="Naranjo">Naranjo</option>
@@ -180,7 +180,7 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
             </div>
           ) : (
             <div className="overflow-x-auto rounded-2xl border border-stone-200">
-              <table className="w-full text-left text-sm">
+              <table className="w-full text-left text-sm min-w-[600px]">
                 <thead className="bg-[#F7F2EB] text-[#3D2314] uppercase text-[11px] font-black tracking-wider border-b border-[#E8DFC8]">
                   <tr>
                     <th className="p-4">Cliente</th>
@@ -233,13 +233,13 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
 
       {/* VISTA 2: FORMULARIO REGISTRAR CLIENTE */}
       {viewMode === 'create' && (
-        <div className="bg-[#FFFDF9] rounded-[28px] border border-orange-200/80 p-8 shadow-md space-y-6">
+        <div className="bg-[#FFFDF9] rounded-[24px] sm:rounded-[28px] border border-orange-200/80 p-5 sm:p-8 shadow-md space-y-6">
           <div className="flex items-center gap-3">
-            <div className="bg-[#FDEFE3] p-3 rounded-2xl text-[#C84B20]">
+            <div className="bg-[#FDEFE3] p-3 rounded-2xl text-[#C84B20] flex-shrink-0">
               <UserPlus className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-xl font-black text-[#3D2314] font-brand-display">
+              <h3 className="text-lg sm:text-xl font-black text-[#3D2314] font-brand-display">
                 Registrar Nuevo Cliente
               </h3>
               <p className="text-xs font-bold text-stone-500">
@@ -280,7 +280,7 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#3D2314] hover:bg-[#8C271E] text-white font-black py-4 rounded-xl shadow-md transition-all cursor-pointer text-base"
+              className="w-full bg-[#3D2314] hover:bg-[#8C271E] text-white font-black py-4 rounded-xl shadow-md transition-all cursor-pointer text-sm sm:text-base"
             >
               {loading ? 'Guardando...' : 'Guardar y Asignar Ticket'}
             </button>
@@ -291,9 +291,9 @@ export const CustomerForm: React.FC<Props> = ({ currentBranch, activeRaffle }) =
       {/* MODAL EDITAR CLIENTE */}
       {editingCustomer && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFDF9] rounded-[28px] border border-orange-200 p-6 max-w-md w-full shadow-2xl space-y-5 animate-in fade-in zoom-in duration-200">
+          <div className="bg-[#FFFDF9] rounded-[24px] sm:rounded-[28px] border border-orange-200 p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-5 animate-in fade-in zoom-in duration-200">
             <div className="flex justify-between items-center border-b border-stone-200 pb-3">
-              <h3 className="text-lg font-black text-[#3D2314] font-brand-display flex items-center gap-2">
+              <h3 className="text-base sm:text-lg font-black text-[#3D2314] font-brand-display flex items-center gap-2">
                 <Edit2 className="w-5 h-5 text-[#C84B20]" /> Editar Cliente
               </h3>
               <button

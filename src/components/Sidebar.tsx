@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { Branch } from '../types';
-import { Home, Users, Ticket, Trophy, MapPin } from 'lucide-react';
+import { Home, Users, Ticket, Trophy, MapPin, Menu, X } from 'lucide-react';
 
 interface SidebarProps {
   currentBranch: Branch;
@@ -15,6 +15,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onTabChange,
 }) => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   const menuItems = [
     { id: 'home', label: 'Inicio', icon: Home },
     { id: 'customers', label: 'Clientes', icon: Users },
@@ -22,14 +24,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'raffle', label: 'Generar Rifa', icon: Trophy },
   ] as const;
 
-  return (
-    <aside className="w-64 bg-[#F7F2EB] text-stone-800 min-h-screen flex flex-col border-r border-[#E8DFC8] shadow-xs flex-shrink-0 select-none justify-between">
+  const handleSelectTab = (tab: 'home' | 'customers' | 'tickets' | 'raffle') => {
+    onTabChange(tab);
+    setMobileOpen(false); // Cierra el menú al seleccionar en celular
+  };
+
+  const menuContent = (
+    <div className="flex flex-col h-full justify-between select-none">
       <div>
-        {/* Cabecera con Logo Proporcionado y Tipografía Alineada */}
+        {/* Cabecera con Logo */}
         <div className="p-5 border-b border-[#E8DFC8]">
           <div className="flex items-center gap-3">
-            {/* Contenedor del Logo con import.meta.env.BASE_URL */}
-            <div className="w-16 h-16 bg-white p-1 rounded-2xl border border-orange-200/80 shadow-xs flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div className="w-14 h-14 bg-white p-1 rounded-2xl border border-orange-200/80 shadow-xs flex items-center justify-center overflow-hidden flex-shrink-0">
               <img
                 src={`${import.meta.env.BASE_URL}logo.png`}
                 alt="Logo Panadería La Familia"
@@ -40,7 +46,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
               />
             </div>
             
-            {/* Título alineado */}
             <div className="flex flex-col justify-center">
               <span className="text-[#C84B20] font-brand-cursive text-xl font-bold leading-tight">
                 La Familia
@@ -51,7 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
           
-          <div className="mt-3.5">
+          <div className="mt-3">
             <span className="inline-block bg-[#8C271E] text-white text-[10px] font-black uppercase tracking-widest px-3 py-0.5 rounded-full shadow-xs">
               A su Servicio
             </span>
@@ -84,7 +89,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             return (
               <button
                 key={item.id}
-                onClick={() => onTabChange(item.id)}
+                onClick={() => handleSelectTab(item.id)}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl font-bold text-sm transition-all duration-200 cursor-pointer ${
                   isActive
                     ? 'bg-[#3D2314] text-[#FFF6EB] shadow-sm'
@@ -109,6 +114,48 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-4 border-t border-[#E8DFC8] text-center text-xs font-semibold text-[#8C7462]">
         Panadería La Familia © 2026
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* 1. BARRA SUPERIOR PARA MÓVILES (< md) */}
+      <div className="md:hidden bg-[#F7F2EB] border-b border-[#E8DFC8] px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xs">
+        <div className="flex items-center gap-2">
+          <img
+            src={`${import.meta.env.BASE_URL}logo.png`}
+            alt="Logo"
+            className="w-8 h-8 object-contain"
+          />
+          <span className="font-black text-[#3D2314] text-sm">Panadería La Familia</span>
+        </div>
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="p-2 bg-[#EFE6D8] text-[#3D2314] rounded-xl border border-[#D9CBB5] focus:outline-none"
+        >
+          {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* 2. MENÚ DESPLEGABLE TIPO DRAWER (EN CELULARES) */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          {/* Fondo oscuro traslúcido */}
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-xs"
+            onClick={() => setMobileOpen(false)}
+          />
+          {/* Panel Lateral */}
+          <div className="relative bg-[#F7F2EB] w-72 max-w-[80vw] h-full shadow-2xl z-10 flex flex-col">
+            {menuContent}
+          </div>
+        </div>
+      )}
+
+      {/* 3. SIDEBAR TRADICIONAL PARA PANTALLAS GRANDES (>= md) */}
+      <aside className="hidden md:flex w-64 bg-[#F7F2EB] text-stone-800 min-h-screen flex-col border-r border-[#E8DFC8] shadow-xs flex-shrink-0">
+        {menuContent}
+      </aside>
+    </>
   );
 };

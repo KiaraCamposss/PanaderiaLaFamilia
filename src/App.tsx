@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import type { Branch, Raffle } from './types';
-import { Toaster } from 'sonner'; // 👈 Importamos Toaster
+import { Toaster } from 'sonner';
 
 import { Sidebar } from './components/Sidebar';
 import { HomeView } from './components/HomeView';
@@ -28,10 +28,11 @@ export default function App() {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-[#fffaf4] text-stone-800 font-sans">
-      {/* Componente que renderiza los Toast Flotantes */}
+    <div className="min-h-screen bg-[#fffaf4] text-stone-800 font-sans flex flex-col md:flex-row">
+      {/* Componente que renderiza las notificaciones flotantes (Toast) */}
       <Toaster position="top-right" richColors />
 
+      {/* Sidebar Responsivo (Barra superior con menú en celular / Lateral en PC) */}
       <Sidebar
         currentBranch={currentBranch}
         onBranchChange={setCurrentBranch}
@@ -39,7 +40,8 @@ export default function App() {
         onTabChange={setActiveTab}
       />
 
-      <main className="flex-1 p-6 md:p-8 overflow-y-auto">
+      {/* Contenido Principal con padding responsivo */}
+      <main className="flex-1 p-4 md:p-8 overflow-y-auto">
         {activeTab === 'home' && (
           <HomeView
             onNavigateToRaffle={() => setActiveTab('raffle')}
